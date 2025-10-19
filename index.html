@@ -13,12 +13,7 @@
         }
         /* Estilo para a caixa de input customizada */
         .input-box {
-            /* w-full em mobile */
             @apply w-full p-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-150 ease-in-out text-gray-800;
-        }
-        /* Garantindo que o body tenha padding adequado para mobile */
-        .body-padding {
-            @apply p-4 sm:p-8;
         }
     </style>
     <script>
@@ -37,17 +32,13 @@
         }
     </script>
 </head>
-<body class="bg-gray-100 min-h-screen body-padding">
+<body class="bg-gray-100 min-h-screen p-4 sm:p-8">
 
     <div id="app" class="max-w-4xl mx-auto">
         <header class="text-center mb-8">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">Painel de Gestão de Banca</h1>
-            <p class="text-md text-gray-500">Defina seus limites e gerencie seu risco com disciplina.</p>
-            <!-- Novo indicador de status Firebase/Usuário -->
-            <p class="text-xs sm:text-sm text-gray-500 mt-1 text-center">
-                Status: <span id="connectionStatus" class="font-semibold text-danger">Desconectado</span>
-                | ID: <span id="userIdDisplay" class="font-mono text-xs text-gray-700 break-all">Carregando...</span>
-            </p>
+            <p class="text-lg text-gray-500">Defina seus limites e gerencie seu risco com disciplina.</p>
+            <p class="text-xs text-gray-400 mt-2">Conectado. ID do Usuário: Carregando...</p>
         </header>
 
         <!-- Seção de Alertas/Notificações (Custom Alert Box) -->
@@ -62,9 +53,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.942 3.313.823 2.306 2.306a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.942 1.543-.823 3.313-2.306 2.306a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.942-3.313-.823-2.306-2.306a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.942-1.543.823-3.313 2.306-2.306a1.724 1.724 0 002.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Configurações Essenciais
+                Configurações Essenciais (Edite aqui)
             </h2>
-            <!-- Grid responsivo: 1 coluna em celular, 2 em tablet/desktop, 3 em telas grandes -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <!-- Banca Inicial -->
                 <div>
@@ -97,34 +87,33 @@
                     <input type="number" id="minimumStake" value="5.00" min="0.1" step="any" class="input-box">
                 </div>
             </div>
-            <button onclick="recalculateAndStart()" class="mt-6 w-full py-3 px-4 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition duration-200 shadow-md">
+            <button onclick="initializeSession()" class="mt-6 w-full py-3 px-4 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition duration-200 shadow-md">
                 RECALCULAR E INICIAR SESSÃO
             </button>
         </div>
 
         <!-- MÉTRICAS DO DIA -->
         <h2 class="text-2xl font-bold text-gray-800 mb-4">Métricas Diárias</h2>
-        <!-- Grid responsivo: 2 colunas em celular, 4 em desktop -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <!-- Banca Atual -->
             <div class="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-500">
-                <p class="text-xs font-medium text-gray-500">Banca Atual</p>
-                <p id="currentBalance" class="text-xl sm:text-2xl font-extrabold text-blue-700 mt-1">R$ 0,00</p>
+                <p class="text-sm font-medium text-gray-500">Banca Atual</p>
+                <p id="currentBalance" class="text-2xl font-extrabold text-blue-700 mt-1">R$ 0,00</p>
             </div>
             <!-- Meta Diária Absoluta -->
             <div class="bg-white p-4 rounded-xl shadow-lg border-l-4 border-success">
-                <p class="text-xs font-medium text-gray-500">Meta Lucro (+)</p>
-                <p id="dailyTargetAmount" class="text-xl sm:text-2xl font-extrabold text-success mt-1">R$ 0,00</p>
+                <p class="text-sm font-medium text-gray-500">Meta Lucro (+)</p>
+                <p id="dailyTargetAmount" class="text-2xl font-extrabold text-success mt-1">R$ 0,00</p>
             </div>
             <!-- Stop Diário Absoluto -->
             <div class="bg-white p-4 rounded-xl shadow-lg border-l-4 border-danger">
-                <p class="text-xs font-medium text-gray-500">Stop Perda (-)</p>
-                <p id="dailyStopAmount" class="text-xl sm:text-2xl font-extrabold text-danger mt-1">R$ 0,00</p>
+                <p class="text-sm font-medium text-gray-500">Stop Perda (-)</p>
+                <p id="dailyStopAmount" class="text-2xl font-extrabold text-danger mt-1">R$ 0,00</p>
             </div>
             <!-- Posição Atual -->
             <div class="bg-white p-4 rounded-xl shadow-lg border-l-4 border-warning">
-                <p class="text-xs font-medium text-gray-500">Lucro/Prejuízo Atual</p>
-                <p id="profitLoss" class="text-xl sm:text-2xl font-extrabold text-gray-800 mt-1">R$ 0,00</p>
+                <p class="text-sm font-medium text-gray-500">Lucro/Prejuízo Atual</p>
+                <p id="profitLoss" class="text-2xl font-extrabold text-gray-800 mt-1">R$ 0,00</p>
             </div>
         </div>
         
@@ -137,7 +126,6 @@
                 Calculadora de Entrada e Simulação
             </h2>
             
-            <!-- Layout: 1 coluna em celular, 2 em desktop -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <!-- Entrada Sugerida -->
                 <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -149,11 +137,15 @@
                 <!-- Botões de Ação -->
                 <div class="flex flex-col space-y-3">
                     <p class="text-sm font-medium text-gray-700">Resultado do Trade (use o valor da Entrada Sugerida):</p>
-                    <button id="winButton" onclick="recordTrade(true)" class="py-3 px-4 bg-success text-white font-bold rounded-lg hover:bg-green-700 transition duration-200 shadow-md flex justify-center items-center disabled:opacity-50">
+                    
+                    <!-- BOTÃO WIN: REMOVIDO onclick para usar addEventListener para melhor suporte touch -->
+                    <button id="winButton" class="py-3 px-4 bg-success text-white font-bold rounded-lg hover:bg-green-700 transition duration-200 shadow-md flex justify-center items-center disabled:opacity-50">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                         WIN (Vitória)
                     </button>
-                    <button id="lossButton" onclick="recordTrade(false)" class="py-3 px-4 bg-danger text-white font-bold rounded-lg hover:bg-red-700 transition duration-200 shadow-md flex justify-center items-center disabled:opacity-50">
+                    
+                    <!-- BOTÃO LOSS: REMOVIDO onclick para usar addEventListener para melhor suporte touch -->
+                    <button id="lossButton" class="py-3 px-4 bg-danger text-white font-bold rounded-lg hover:bg-red-700 transition duration-200 shadow-md flex justify-center items-center disabled:opacity-50">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
                         LOSS (Perda)
                     </button>
@@ -165,16 +157,15 @@
         <!-- REGISTRO DE TRADES -->
         <div class="mt-8 bg-white p-6 rounded-xl shadow-2xl">
             <h2 class="text-xl font-bold text-gray-800 mb-4">Registro de Trades</h2>
-            <!-- Scroll horizontal para a tabela em telas pequenas -->
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resultado</th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entrada</th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">L/P</th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Banca Após</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resultado</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entrada (R$)</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lucro/Prejuízo (R$)</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Banca Após (R$)</th>
                         </tr>
                     </thead>
                     <tbody id="tradeLog" class="bg-white divide-y divide-gray-200">
@@ -194,26 +185,7 @@
 
     </div>
 
-    <script type="module">
-        // Firebase Imports
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // Ativa logs de debug do Firestore (útil para desenvolvimento)
-        setLogLevel('debug'); 
-
-        // Variáveis globais do Firebase
-        let db;
-        let auth;
-        let userId = 'loading';
-        // Acessa as variáveis globais do Canvas
-        let appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const SESSION_DOC_ID = 'daily-session';
-        
-        let isFirebaseReady = false;
-
+    <script>
         // Variáveis de Estado Global
         let session = {
             initialBalance: 0,
@@ -251,8 +223,6 @@
             messageText: document.getElementById('message-text'),
             winButton: document.getElementById('winButton'),
             lossButton: document.getElementById('lossButton'),
-            connectionStatus: document.getElementById('connectionStatus'),
-            userIdDisplay: document.getElementById('userIdDisplay'),
         };
 
         /**
@@ -283,179 +253,9 @@
         }
 
         /**
-         * Inicializa o Firebase, autentica o usuário e carrega a sessão.
-         */
-        async function setupFirebase() {
-            try {
-                // Tenta parsear a configuração do Firebase (variável global do ambiente)
-                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-                if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
-                    throw new Error("A variável global __firebase_config está vazia ou ausente.");
-                }
-
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                DOMElements.connectionStatus.textContent = 'Autenticando...';
-
-                // Listener para a mudança de estado da autenticação
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        DOMElements.userIdDisplay.textContent = userId;
-                        DOMElements.connectionStatus.textContent = 'Conectado';
-                        DOMElements.connectionStatus.classList.remove('text-danger', 'text-warning');
-                        DOMElements.connectionStatus.classList.add('text-success');
-
-                        isFirebaseReady = true;
-                        // Depois de autenticar, carrega a sessão salva
-                        await loadSession();
-                    } else {
-                        // Tenta autenticação com token ou anonimamente
-                        try {
-                            if (initialAuthToken) {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                            } else {
-                                await signInAnonymously(auth);
-                            }
-                        } catch (e) {
-                            console.error("Erro na autenticação:", e);
-                            userId = 'anon-failed';
-                            DOMElements.userIdDisplay.textContent = 'Falha na Auth';
-                            DOMElements.connectionStatus.textContent = 'Auth Falhou';
-                            DOMElements.connectionStatus.classList.remove('text-success');
-                            DOMElements.connectionStatus.classList.add('text-danger');
-                            showMessage("Erro crítico: Falha na autenticação. Usando dados temporários.", 'danger');
-                            isFirebaseReady = false;
-                            // Se a auth falhar, inicializa com valores padrão sem persistência.
-                            initializeSession(false);
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error("Erro na configuração inicial do Firebase:", error);
-                DOMElements.connectionStatus.textContent = 'CRÍTICO';
-                DOMElements.userIdDisplay.textContent = 'Erro de Config';
-                showMessage(`Erro: Configuração do Firebase não encontrada. ${error.message}`, 'danger');
-                // Se a config falhar, inicializa com valores padrão sem persistência.
-                initializeSession(false); 
-            }
-        }
-        
-        /**
-         * Salva o estado atual da sessão no Firestore.
-         */
-        async function saveSession() {
-            if (!isFirebaseReady || !userId || !db) {
-                console.log("Firebase não pronto. Salvamento ignorado.");
-                return;
-            }
-
-            try {
-                // Caminho: /artifacts/{appId}/users/{userId}/sessions/daily-session
-                const sessionRef = doc(db, `artifacts/${appId}/users/${userId}/sessions/${SESSION_DOC_ID}`);
-                
-                // Serializa o array de log para JSON string (Firestore não lida bem com arrays muito aninhados)
-                await setDoc(sessionRef, {
-                    ...session,
-                    log: JSON.stringify(session.log)
-                });
-                console.log("Sessão salva com sucesso no Firestore.");
-
-            } catch (error) {
-                console.error("Erro ao salvar a sessão no Firestore:", error);
-                // Não exibe mensagem para o usuário para não poluir o painel, apenas no console.
-            }
-        }
-
-        /**
-         * Carrega o estado da sessão do Firestore ou inicializa se não for encontrado.
-         */
-        async function loadSession() {
-            if (!isFirebaseReady || !userId || !db) {
-                console.log("Firebase não pronto. Carregamento ignorado.");
-                return;
-            }
-
-            try {
-                const sessionRef = doc(db, `artifacts/${appId}/users/${userId}/sessions/${SESSION_DOC_ID}`);
-                const docSnap = await getDoc(sessionRef);
-
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    
-                    // Atualiza os inputs com os dados carregados (para persistir as configurações)
-                    DOMElements.initialBalance.value = data.initialBalance.toFixed(2);
-                    DOMElements.dailyTargetPercent.value = data.dailyTargetPercent.toFixed(1);
-                    DOMElements.dailyStopPercent.value = data.dailyStopPercent.toFixed(1);
-                    // O payoutRate é guardado como decimal, volta para % para o input
-                    DOMElements.payoutRate.value = (data.payoutRate * 100).toFixed(0); 
-                    DOMElements.riskPerTradePercent.value = data.riskPerTradePercent.toFixed(1);
-                    DOMElements.minimumStake.value = data.minimumStake.toFixed(2);
-                    
-                    // Aplica o resto do estado da sessão
-                    session = {
-                        ...data,
-                        payoutRate: data.payoutRate, 
-                        // Deserializa o log de volta para array de objetos
-                        log: JSON.parse(data.log || '[]') 
-                    };
-                    
-                    // Recalcula limites (apenas para garantir que os valores absolutos estejam corretos)
-                    calculateLimits(false);
-                    updateUI();
-                    showMessage("Sessão carregada do seu último backup.", 'success');
-
-                } else {
-                    console.log("Nenhum dado de sessão encontrado. Inicializando com valores padrão.");
-                    initializeSession(true); // Inicializa e salva pela primeira vez
-                    showMessage("Sessão inicializada com valores padrão. Use 'RECALCULAR' para salvar.", 'warning');
-                }
-            } catch (error) {
-                console.error("Erro ao carregar a sessão do Firestore:", error);
-                showMessage("Erro ao carregar dados. Usando valores padrão.", 'danger');
-                initializeSession(false); 
-            }
-        }
-        
-        /**
-         * Recalcula os limites (Meta e Stop) e salva no estado.
-         * @param {boolean} shouldSave - Indica se deve salvar no Firestore após o cálculo.
-         */
-        function calculateLimits(shouldSave = true) {
-             // Leitura dos inputs
-            const initialBalance = parseFloat(DOMElements.initialBalance.value);
-            const dailyTargetPercent = parseFloat(DOMElements.dailyTargetPercent.value);
-            const dailyStopPercent = parseFloat(DOMElements.dailyStopPercent.value);
-            const payoutRate = parseFloat(DOMElements.payoutRate.value) / 100;
-            const riskPerTradePercent = parseFloat(DOMElements.riskPerTradePercent.value);
-            const minimumStake = parseFloat(DOMElements.minimumStake.value);
-
-            // Calcula os valores absolutos de Meta e Stop
-            session.dailyTargetAmount = initialBalance * (dailyTargetPercent / 100);
-            session.dailyStopAmount = initialBalance * (dailyStopPercent / 100);
-
-            // Atualiza o estado da sessão com as configs dos inputs
-             session.initialBalance = initialBalance;
-             session.dailyTargetPercent = dailyTargetPercent;
-             session.dailyStopPercent = dailyStopPercent;
-             session.payoutRate = payoutRate; 
-             session.riskPerTradePercent = riskPerTradePercent;
-             session.minimumStake = minimumStake;
-
-             if (shouldSave) {
-                 saveSession();
-             }
-        }
-        
-        /**
          * Inicializa a sessão com os valores dos inputs.
-         * @param {boolean} shouldSave - Indica se deve salvar no Firestore após a inicialização.
          */
-        function initializeSession(shouldSave = true) {
+        function initializeSession() {
             try {
                 // Leitura e validação dos inputs
                 const initialBalance = parseFloat(DOMElements.initialBalance.value);
@@ -465,32 +265,34 @@
                 const riskPerTradePercent = parseFloat(DOMElements.riskPerTradePercent.value);
                 const minimumStake = parseFloat(DOMElements.minimumStake.value);
 
-
                 if (isNaN(initialBalance) || initialBalance <= 0 ||
                     isNaN(dailyTargetPercent) || dailyTargetPercent <= 0 ||
                     isNaN(dailyStopPercent) || dailyStopPercent <= 0 ||
                     isNaN(payoutRate) || payoutRate < 50 || payoutRate > 100 ||
                     isNaN(riskPerTradePercent) || riskPerTradePercent <= 0 ||
                     isNaN(minimumStake) || minimumStake <= 0) {
-                    throw new Error("Por favor, preencha todos os campos com valores válidos.");
+                    throw new Error("Por favor, preencha todos os campos com valores válidos (maior que zero, e Payout entre 50 e 100).");
                 }
-                
-                // Define o estado inicial da sessão com base nos inputs
+
+                // Configura o estado da sessão
+                session.initialBalance = initialBalance;
                 session.currentBalance = initialBalance;
+                session.dailyTargetPercent = dailyTargetPercent;
+                session.dailyStopPercent = dailyStopPercent;
+                session.payoutRate = payoutRate / 100; // Converte para decimal
+                session.riskPerTradePercent = riskPerTradePercent;
+                session.minimumStake = minimumStake;
                 session.profitToday = 0;
                 session.tradeCount = 0;
                 session.log = [];
 
-                calculateLimits(false); // Calcula limites mas não salva ainda
-
-                // Chamado apenas se o usuário clicar no botão ou se for a primeira inicialização
-                if (shouldSave) {
-                    saveSession();
-                    showMessage("Sessão iniciada! Seus limites e risco foram recalculados e salvos.", 'success');
-                }
+                // Calcula os valores absolutos de Meta e Stop
+                session.dailyTargetAmount = session.initialBalance * (session.dailyTargetPercent / 100);
+                session.dailyStopAmount = session.initialBalance * (session.dailyStopPercent / 100);
 
                 // Atualiza o UI
                 updateUI();
+                showMessage("Sessão iniciada! Seus limites e risco foram recalculados.", 'success');
                 DOMElements.tradeLog.innerHTML = '';
                 enableTradingButtons();
 
@@ -499,7 +301,7 @@
                 showMessage(error.message, 'danger');
             }
         }
-        
+
         /**
          * Calcula o valor da próxima entrada baseada no risco percentual da banca.
          * Garante que a entrada é pelo menos a Entrada Mínima.
@@ -517,13 +319,9 @@
          * Registra o resultado de um trade e atualiza o estado da sessão.
          * @param {boolean} isWin - True se for vitória, False se for perda.
          */
-        window.recordTrade = function(isWin) {
+        function recordTrade(isWin) {
             if (session.currentBalance <= 0) {
                 showMessage("A banca está zerada. Reinicie a sessão para continuar.", 'danger');
-                return;
-            }
-             if (!isFirebaseReady) {
-                showMessage("Aguarde a conexão com o Firebase antes de registrar trades.", 'warning');
                 return;
             }
 
@@ -533,10 +331,10 @@
             // 2. Calcula o resultado do trade
             let tradeResult; // Lucro ou Prejuízo do trade
             if (isWin) {
-                // Lucro = Entrada * Payout
+                // Lucro = Entrada * Payout (ex: 10 * 0.90 = 9)
                 tradeResult = stake * session.payoutRate;
             } else {
-                // Prejuízo = -Entrada
+                // Prejuízo = -Entrada (perda total da entrada)
                 tradeResult = -stake;
             }
 
@@ -551,17 +349,15 @@
                 type: isWin ? 'WIN' : 'LOSS',
                 stake: stake,
                 result: tradeResult,
-                balanceAfter: session.currentBalance,
-                timestamp: new Date().toISOString()
+                balanceAfter: session.currentBalance
             };
             session.log.unshift(logEntry); // Adiciona no início (mais recente no topo)
 
             // 5. Verifica as condições de Stop/Meta
             checkSessionLimits();
 
-            // 6. Atualiza o UI e Salva no Firestore
+            // 6. Atualiza o UI
             updateUI();
-            saveSession();
         }
 
         /**
@@ -602,17 +398,9 @@
         /**
          * Redefine a banca para o valor inicial e zera o log.
          */
-        window.resetSession = function() {
-            // Re-inicializa a sessão com os valores atuais dos inputs e força o salvamento
-            initializeSession(true);
-            showMessage("A sessão foi reiniciada, o histórico de trades foi zerado e salvo.", 'warning');
-        }
-
-        /**
-         * Wrapper para o botão de Recalcular
-         */
-        window.recalculateAndStart = function() {
-            initializeSession(true); // Inicializa e salva no Firestore
+        function resetSession() {
+            initializeSession();
+            showMessage("A sessão foi reiniciada e o histórico de trades foi zerado.", 'warning');
         }
 
         /**
@@ -620,12 +408,13 @@
          */
         function updateUI() {
             // Atualiza as Métricas Diárias
+            const currentLoss = session.profitToday * -1;
             
             DOMElements.currentBalance.textContent = formatCurrency(session.currentBalance);
             
             // Cor da Banca Atual
             DOMElements.currentBalance.classList.remove('text-blue-700', 'text-success', 'text-danger');
-            if (session.currentBalance > session.initialBalance) {
+            if (session.currentBalance >= session.initialBalance) {
                  DOMElements.currentBalance.classList.add('text-success');
             } else if (session.currentBalance < session.initialBalance) {
                 DOMElements.currentBalance.classList.add('text-danger');
@@ -659,20 +448,50 @@
                 const resultColor = trade.type === 'WIN' ? 'text-success' : 'text-danger';
                 return `
                     <tr class="${rowClass}">
-                        <td class="px-3 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${trade.id}</td>
-                        <td class="px-3 py-2 whitespace-nowrap text-xs font-bold ${resultColor}">${trade.type}</td>
-                        <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-500">${formatCurrency(trade.stake)}</td>
-                        <td class="px-3 py-2 whitespace-nowrap text-xs font-semibold ${resultColor}">${formatCurrency(trade.result)}</td>
-                        <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-900">${formatCurrency(trade.balanceAfter)}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${trade.id}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm font-bold ${resultColor}">${trade.type}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">${formatCurrency(trade.stake)}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm font-semibold ${resultColor}">${formatCurrency(trade.result)}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">${formatCurrency(trade.balanceAfter)}</td>
                     </tr>
                 `;
             }).join('');
+        }
+        
+        /**
+         * Configura os event listeners para os botões WIN e LOSS,
+         * usando 'touchstart' para garantir resposta imediata em dispositivos móveis.
+         */
+        function setupEventListeners() {
+            // Helper function to handle trade recording and prevent default touch behavior
+            const handleTrade = (isWin, e) => {
+                // Se for um evento de toque, impede o comportamento padrão 
+                // para evitar o atraso de 300ms do click em mobile.
+                if (e.type === 'touchstart') {
+                    e.preventDefault(); 
+                }
+                recordTrade(isWin);
+            };
+
+            // Remove o onclick inline (se existir) para evitar duplicação de eventos
+            DOMElements.winButton.removeAttribute('onclick');
+            DOMElements.lossButton.removeAttribute('onclick');
             
-            checkSessionLimits(); // Garante que os botões sejam desabilitados se os limites forem atingidos
+            // Adiciona o listener para o botão WIN (click e touchstart)
+            DOMElements.winButton.addEventListener('click', (e) => handleTrade(true, e));
+            // passive: false é importante para permitir e.preventDefault() no touchstart
+            DOMElements.winButton.addEventListener('touchstart', (e) => handleTrade(true, e), { passive: false });
+
+            // Adiciona o listener para o botão LOSS (click e touchstart)
+            DOMElements.lossButton.addEventListener('click', (e) => handleTrade(false, e));
+            DOMElements.lossButton.addEventListener('touchstart', (e) => handleTrade(false, e), { passive: false });
         }
 
-        // Inicialização ao carregar a página: Inicia o Firebase
-        window.onload = setupFirebase;
+        // Inicialização ao carregar a página
+        window.onload = function() {
+            initializeSession();
+            setupEventListeners(); // Chama a nova função de setup de eventos
+        };
     </script>
 </body>
 </html>
